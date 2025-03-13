@@ -24,7 +24,7 @@ def register_device():
 
     return jsonify({"success":True})
 
-@app.route('/register', methods=["GET"])
+@app.route('/devices', methods=["GET"])
 def get_devices():
     return jsonify({"devices":
                     list(connected_devices)})
