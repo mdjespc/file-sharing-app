@@ -14,6 +14,7 @@ class MainView():
     def __init__(self, root : tk.Tk):
         #self.controller = controller
         self.root = root
+        self.callbacks = dict()
 
         self.root.geometry(f"{self.ROOTWIDTH}x{self.ROOTHEIGHT}")
         self.root.title("File Sharing App")
@@ -41,7 +42,9 @@ class MainView():
         
         self.refresh_button = Button(self.root,
                                      cnf=self.PRIMARYSTYLE,
-                                     text="REFRESH")
+                                     text="REFRESH",
+                                     width=10,
+                                     height=2)
         self.refresh_button.grid(row=2,
                                 column=0,
                                 padx=5,
@@ -50,7 +53,9 @@ class MainView():
 
         self.upload_button = Button(self.root,
                                      cnf=self.PRIMARYSTYLE,
-                                     text="UPLOAD")
+                                     text="UPLOAD",
+                                     width=10,
+                                     height=2)
         self.upload_button.grid(row=3,
                                 column=0,
                                 padx=5,
@@ -66,3 +71,13 @@ class MainView():
         self.device_listbox.delete(0, tk.END)
         for device in devices:
             self.device_listbox.insert(tk.END, device)
+
+    def request_file(self):
+        return filedialog.askopenfilename()
+
+    def add_callbacks(self, key, method):
+        self.callbacks[key] = method
+
+    def bind_commands(self):
+        self.refresh_button.config(command=self.callbacks["refresh"])
+        self.upload_button.config(command=self.callbacks["upload"])
