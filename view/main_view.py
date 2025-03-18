@@ -21,6 +21,15 @@ class MainView():
 
         #TODO Canvas
 
+        self.alias_label = Label(self.root,
+                                 text=f"Alias: UNKNOWN",
+                                 cnf=self.PRIMARYSTYLE
+        )
+        self.alias_label.grid(row=0,
+                              column=0,
+                              padx=5,
+                              pady=5)
+
         self.device_listbox = Listbox(self.root,
                                          width=10,
                                          height=5,
@@ -65,7 +74,16 @@ class MainView():
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
 
-    
+
+    def update_alias_label(self, alias):
+        self.alias_label.config(text=f"Alias: {alias}")
+
+    '''
+    Callback methods
+
+    These are strictly binded to the corresponding Tkinter widgets that trigger them on interaction.
+    All callback method binding is handled through the controller.
+    '''
     def update_device_list(self, devices):
         #Updates the listbox with detected devices
         self.device_listbox.delete(0, tk.END)
@@ -75,6 +93,16 @@ class MainView():
     def request_file(self):
         return filedialog.askopenfilename()
 
+
+    '''
+    In order to bind commands, the associated callback method is added
+    through the controller.
+
+    Once the controller has verified that all relevant methods have been
+    added to the callback dictionary, it will then call `bind_commands`
+    to individually configure each button or widget with the corresponding
+    callback method as its command bind.
+    '''
     def add_callbacks(self, key, method):
         self.callbacks[key] = method
 
