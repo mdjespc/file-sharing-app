@@ -1,10 +1,18 @@
+import os
 import tkinter as tk
 from tkinter import filedialog, Label, Button, Listbox
+from tkinter import Tk, Label, PhotoImage
+from PIL import Image, ImageTk
+
 
 class MainView():
     ROOTWIDTH, ROOTHEIGHT = 300, 500
-    PRIMARYFONT = ("Bookman Old Style", 16, "bold") 
+    BGCOLOR = "#d5d9ce"
+    HEADERCOLOR = "#000000"
+    PRIMARYFONT = ("Bookman Old Style", 12, "bold") 
+    HEADERFONT = ("Bookman Old Style", 28, "bold")
     PRIMARYSTYLE = {
+        "font": PRIMARYFONT,
         "bg":"#137fad",
         "fg":"#ffffff",
         "highlightcolor":"#063d80",
@@ -12,20 +20,51 @@ class MainView():
     }
 
     def __init__(self, root : tk.Tk):
-        #self.controller = controller
         self.root = root
         self.callbacks = dict()
 
         self.root.geometry(f"{self.ROOTWIDTH}x{self.ROOTHEIGHT}")
         self.root.title("File Sharing App")
+        favicon_path = os.path.abspath(os.path.join("resources", "favicon.ico"))
+        self.root.iconbitmap(default = favicon_path)
 
-        #TODO Canvas
+        canvas = tk.Canvas(self.root, width=self.ROOTWIDTH, height=self.ROOTHEIGHT, bg=self.BGCOLOR, bd=0)
+        canvas.grid(row=0,
+                    rowspan=6,
+                    column=0,
+                    columnspan=4,
+                    padx=0,
+                    pady=0,
+                    sticky="nsew"
+        )
 
+        self.header_label = Label(self.root,
+                                  font=self.HEADERFONT,
+                                  bg=self.BGCOLOR,
+                                  fg=self.HEADERCOLOR,
+                                  text="FILE SHARING"
+                                )
+        self.header_label.grid(row=0,
+                               column=0,
+                               padx=0,
+                               pady=0
+        )
+
+        logo_image_path = os.path.abspath(os.path.join("resources", "logo.png"))
+        self.main_logo = ImageTk.PhotoImage(Image.open(logo_image_path).resize((128, 128)))
+        self.main_logo_label = Label(self.root, image=self.main_logo, bg=self.BGCOLOR)
+        self.main_logo_label.grid(row=1,
+                                column=0,
+                                padx=0,
+                                pady=0
+        )
+        
+        
         self.alias_label = Label(self.root,
-                                 text=f"Alias: UNKNOWN",
+                                 text=f"UNKNOWN",
                                  cnf=self.PRIMARYSTYLE
         )
-        self.alias_label.grid(row=0,
+        self.alias_label.grid(row=2,
                               column=0,
                               padx=5,
                               pady=5)
@@ -41,7 +80,7 @@ class MainView():
                                          selectbackground=self.PRIMARYSTYLE["highlightcolor"],
                                          relief=self.PRIMARYSTYLE["relief"]
                                          )
-        self.device_listbox.grid(row=1,
+        self.device_listbox.grid(row=3,
                                 rowspan=1,
                                 column=0,
                                 columnspan=2,
@@ -54,7 +93,7 @@ class MainView():
                                      text="REFRESH",
                                      width=10,
                                      height=2)
-        self.refresh_button.grid(row=2,
+        self.refresh_button.grid(row=4,
                                 column=0,
                                 padx=5,
                                 pady=5
@@ -65,7 +104,7 @@ class MainView():
                                      text="UPLOAD",
                                      width=10,
                                      height=2)
-        self.upload_button.grid(row=3,
+        self.upload_button.grid(row=5,
                                 column=0,
                                 padx=5,
                                 pady=5
@@ -76,7 +115,7 @@ class MainView():
 
 
     def update_alias_label(self, alias):
-        self.alias_label.config(text=f"Alias: {alias}")
+        self.alias_label.config(text=f"Others will see you as {alias}")
 
     '''
     Callback methods
