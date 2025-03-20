@@ -21,7 +21,8 @@ class MainController():
         self.view.bind_commands()
 
     def refresh(self):
-        self.view.update_device_list(self.devices)
+        devices = self.model.get_discovered_devices()
+        self.view.update_device_list(devices)
 
     def upload(self):
         selected_file = self.view.request_file()
